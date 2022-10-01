@@ -4,20 +4,13 @@ import { Filter } from './Filter';
 import { Title } from './Styles';
 import { PhoneBookForm } from './PhonebookForm';
 import { useDispatch, useSelector } from 'react-redux';
-import * as contactActions from 'data/actions';
+import * as contactActions from 'redux/actions';
 
 export const App = () => {
   const contactState = useSelector(state => state.contacts.items);
   const contactFilter = useSelector(state => state.contacts.filter);
-  useSelector(state => console.log(contactState));
+  useSelector(state => console.log(state.contacts.items));
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const contactsStored = localStorage.getItem('contacts');
-    const storageContacts = JSON.parse(contactsStored);
-    dispatch(contactActions.addContact(storageContacts));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contactState));
@@ -29,7 +22,7 @@ export const App = () => {
 
   const filterByName = () => {
     return contactState.filter(contact => {
-      return contact.name.toLowerCase().includes(contactFilter?.toLowerCase());
+      return contact.name.toLowerCase().includes(contactFilter.toLowerCase());
     });
   };
 
@@ -45,7 +38,6 @@ export const App = () => {
 
   const toDelete = id => {
     dispatch(contactActions.deleteContact(id));
-    // setContacts(contacts.filter(contact => contact.id !== id));
   };
 
   return (
