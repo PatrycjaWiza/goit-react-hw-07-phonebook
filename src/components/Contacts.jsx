@@ -20,6 +20,7 @@ export const Contacts = ({ filterByName, toDelete }) => {
     </ul>
   );
 };
+
 Contacts.propTypes = {
   filterByName: PropTypes.func,
   toDelete: PropTypes.func,

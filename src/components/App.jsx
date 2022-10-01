@@ -1,53 +1,51 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Contacts } from './Contacts';
 import { Filter } from './Filter';
 import { Title } from './Styles';
 import { PhoneBookForm } from './PhonebookForm';
+import { useDispatch, useSelector } from 'react-redux';
+import * as contactActions from 'data/actions';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+  const contactState = useSelector(state => state.contacts.items);
+  const contactFilter = useSelector(state => state.contacts.filter);
+  useSelector(state => console.log(contactState));
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const contactsStored = localStorage.getItem('contacts');
     const storageContacts = JSON.parse(contactsStored);
-    storageContacts !== []
-      ? setContacts(storageContacts)
-      : setContacts([
-          { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-          { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-          { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-          { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-        ]);
+    dispatch(contactActions.addContact(storageContacts));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    console.count(contacts);
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+    localStorage.setItem('contacts', JSON.stringify(contactState));
+  }, [contactState]);
 
   const handleChange = e => {
-    setFilter(e.target.value);
+    dispatch(contactActions.addFilter(e.target.value));
   };
 
   const filterByName = () => {
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
+    return contactState.filter(contact => {
+      return contact.name.toLowerCase().includes(contactFilter?.toLowerCase());
+    });
   };
 
   const contactSubmit = values => {
-    const nameArray = contacts.map(contact => {
+    const nameArray = contactState.map(contact => {
       return contact.name;
     });
     if (nameArray.includes(values.name)) {
       return alert(`${values.name} is already in contacts.`);
     }
-    return setContacts([values, ...contacts]);
+    return dispatch(contactActions.addContact(values));
   };
 
   const toDelete = id => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+    dispatch(contactActions.deleteContact(id));
+    // setContacts(contacts.filter(contact => contact.id !== id));
   };
 
   return (
@@ -55,7 +53,7 @@ export const App = () => {
       <h1>Phonebook</h1>
       <PhoneBookForm onSubmit={contactSubmit} />
       <Title>Contacts</Title>
-      <Filter value={filter} filterByName={handleChange} />
+      <Filter value={contactFilter} filterByName={handleChange} />
       <Contacts filterByName={filterByName} toDelete={toDelete} />
     </div>
   );
