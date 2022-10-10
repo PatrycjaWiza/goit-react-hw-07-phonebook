@@ -1,12 +1,12 @@
 import { Button } from './Styles';
 import PropTypes from 'prop-types';
 
-export const Contacts = ({ filterByName, toDelete }) => {
+export const Contacts = ({ contacts, toDelete }) => {
   return (
     <ul>
-      {filterByName().map(({ name, number, id }) => (
+      {contacts.map(({ name, phone, id }) => (
         <li key={id}>
-          {name}: {number}
+          {name}: {phone}
           <Button
             type="submit"
             onClick={() => {

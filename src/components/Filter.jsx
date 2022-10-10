@@ -1,7 +1,7 @@
 import { Input } from './Styles';
 import PropTypes from 'prop-types';
 
-export const Filter = ({ filterByName, value }) => {
+export const Filter = ({ onChange, value }) => {
   return (
     <>
       <p>Find contacts by name</p>
@@ -9,13 +9,13 @@ export const Filter = ({ filterByName, value }) => {
         type="text"
         name="filter"
         value={value}
-        onChange={filterByName}
+        onChange={onChange}
       ></Input>
     </>
   );
 };
 
 Filter.propTypes = {
-  filterByName: PropTypes.func,
+  onChange: PropTypes.func,
   value: PropTypes.string,
 };
