@@ -2,10 +2,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as contactActions from 'redux/actions';
 import { useEffect } from 'react';
 import { Title } from './Styles';
+import { addContact, deleteContact, fetchContacts } from 'services/api';
 import { Contacts } from './Contacts';
 import { Filter } from './Filter';
 import { PhoneBookForm } from './PhonebookForm';
-import { addContact, deleteContact, fetchContacts } from 'services/api';
 
 export const App = () => {
   const contactState = useSelector(state => state.contacts.items);
